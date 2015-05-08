@@ -1,0 +1,51 @@
+Serielle Schnittstelle, 19200Baud 8N1
+
+Start Symbol: "!!!" = "0x21 0x21 0x21"
+Timeout: 1s
+
+
+Who: 'w'
+	Beispiel: "!!!w" = "0x21 0x21 0x21 0x57"
+	Gibt alle erreichbaren Schränke zurück
+	Antwort: "0x00 0x03 0x1e 0x4f" -> Schränke mit den Adressen 0, 3, 30 und 79 sind da
+	
+Schrank Besetzt: 'b' 
+	Beispiel: "!!!b<Adresse>" Mit Adresse 79 = 0x4f -> "0x21 0x21 0x21 0x62 0x4f"
+	Prüft ob der Schrank besetzt ist
+	Antwort: <Adresse><Ja = 1/Nein = 0> zB 79 besetzt -> "0x4f 0x01"
+	
+Schrank entsperren: 'u'
+	Beispiel: "!!!u<Adresse> Mit Adresse 79 = 0x4f -> "0x21 0x21 0x21 0x75 0x4f"
+	Entsperrt das öffnen des Schranks für 20 Sekunden
+	Antwort: <Adresse>u zB 79 öffnet -> "0x4f 0x75"
+	
+Schrank Schloss prüfen: 'l'
+	Beispiel: "!!!l<Adresse> Mit Adresse 79 = 0x4f -> "0x21 0x21 0x21 0x6C 0x4f"
+	Prüft ob die Tür offen ist
+	Antwort: <Adresse><Ja = 1/Nein = 0> zB 79 offen -> "0x4f 0x01"
+	
+Zeiten:
+	Befehle müssen innerhalb 1s nach dem ersten '!' "fertig" sein, sonst Timeout -> neues erstes '!'
+	Zwischen zwei Befehlen bitte Pause von etwa 50ms (Wenn 30ms ist auch nicht schlimm, aber 
+	wer weiß was an Funktionen kommt und Busteilnehmer kommt). Die meisten Befehle Antworten in 
+	wenigen ms, aber 'w', also die Abfrage der erreichbaren Schränke, kann bei vielen Schränken später
+	bis zu 1sek dauern.
+
+Hardware:
+	Über den großen (USB B) Stecker Strom aufs Board, an der kleinen Extraplatine MiniUSB für die 
+	Serielle Schnittstelle.
+	
+	Taster S1 - ohne Funktion
+	LED L1 - Strom da
+	
+	LED L2 - Schrank ist entriegelt (Nach Befehl schrank entsperren), Kann über S2 geöffnet werden
+	Taster S2 - Tür öffnen 
+	
+	LED L3 - Schrank auf
+	LED L4 - Schrank geschlossen
+	Taster S3 - Schrank schließen
+	
+	LED L5 - Schrank besetzt ("was drin")
+	LED L6 - Schrank leer
+	Taster S4 - Schrank leer/voll ändern
+	
